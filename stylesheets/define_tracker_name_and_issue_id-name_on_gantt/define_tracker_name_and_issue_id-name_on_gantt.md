@@ -24,6 +24,6 @@
     padding: 0 0.2em;
     border: 1px solid;
     display: inline-block;
-    line-height: 1.2em;
+    line-height: 1.1em;
 }
 ```

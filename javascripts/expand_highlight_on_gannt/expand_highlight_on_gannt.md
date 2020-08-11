@@ -61,7 +61,7 @@ $(function() {
     // define hover event function for gantt-area-object
     var hover_gantt_area_object = function(elem, color){
         var issue_id = $(elem).attr('data-collapse-expand');
-        if (issue_id.includes('issue-')) {
+        if (issue_id.indexOf('issue-')>-1) {
             update_gantt_highlight_subject(issue_id, color);
             if (color === '') {
                 $('#gantt_highlight').hide();
