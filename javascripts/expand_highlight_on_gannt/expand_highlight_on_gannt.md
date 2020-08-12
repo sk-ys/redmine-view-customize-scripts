@@ -10,6 +10,12 @@
 ### After
 ![after](after.png)
 
+## 動作確認
+- Redmine
+  - 4.1.1
+- ブラウザ
+  - IE11
+  - Chrome
 
 ## 設定
 - パスのパターン: /gantt
@@ -31,7 +37,7 @@ $(function() {
         display: 'none',
         top: 0,
         left: 0,
-        width: '100%',
+        width: $('#gantt_area>div.gantt_hdr:first').css('width'),
         height: highlight_height,
         backgroundColor: highlight_color
     });
