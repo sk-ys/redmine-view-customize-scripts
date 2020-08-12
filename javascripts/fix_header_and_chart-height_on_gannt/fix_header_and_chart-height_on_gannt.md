@@ -301,8 +301,8 @@ $(function () {
     // initial invoke
     window.setTimeout(function(){
         set_state_gantt_height();
-        set_state_header();
         set_gant_area_height();
+        set_state_header();
         set_position_fixed();
     }, 10);
 });
