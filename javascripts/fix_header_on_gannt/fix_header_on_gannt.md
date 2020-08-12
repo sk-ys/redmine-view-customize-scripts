@@ -11,6 +11,13 @@ Redmine 初期状態では，ガントチャートの表示項目が多い場合
 ### After
 ![after](after.png)
 
+## 動作確認
+- Redmine
+  - 4.1.1
+- ブラウザ
+  - IE11
+  - Chrome
+
 ## 設定
 - パスのパターン: /gantt
 - 種別: JavaScript
@@ -19,14 +26,18 @@ Redmine 初期状態では，ガントチャートの表示項目が多い場合
 ```JavaScript
 $(function() {
     // 固定日付ヘッダーを追加
-    $('#gantt_area').prepend('<div id="gantt_area_header_fixed"></div>');
+    $('#gantt_area').prepend(
+        '<div id="gantt_area_header_fixed_outer">' +
+        '<div id="gantt_area_header_fixed"></div></div>');
     $('#gantt_area_header_fixed').append($('#gantt_area .gantt_hdr').clone(true));
-    $('#gantt_area_header_fixed').css({
+    $('#gantt_area_header_fixed_outer').css({
         top: 0,
         paddingLeft: 1,
         zIndex: 100,
         height: '74px',
         overflow: 'hidden',
+        position: 'fixed',
+        display: 'none'
     });
 
     // 土日欄が下まで延長されてしまう現象を防ぐ
@@ -42,15 +53,16 @@ $(function() {
 
     // オプション項目の設定
     $('.gantt_hdr_selected_column_name').parent().css('z-index', 102);
+
+    // 固定日付ヘッダーの幅を更新
+    var set_width = function() {
+        $('#gantt_area_header_fixed_outer').width($('#gantt_area').width())
+    }
     
-    // 固定ヘッダー表示時の設定
-    var set_position_fixed = function(){
+    // 固定日付ヘッダー表示時の設定
+    var set_position_fixed = function() {
         var offset_left = $('#gantt_area>.gantt_hdr:first').offset().left;
-        $('#gantt_area_header_fixed').show();
-        $('#gantt_area_header_fixed').css({
-            position: 'fixed',
-            width: $('#gantt_area').width() - offset_left + $('#gantt_area').position().left
-        });
+        $('#gantt_area_header_fixed_outer').show();
         $('#gantt_subjects_container_fixed').css('position', 'fixed');
         $('.gantt_hdr_selected_column_name').parent().css('position', 'fixed');
         $('#gantt_area_header_fixed').offset({left: offset_left});
@@ -58,8 +70,7 @@ $(function() {
 
     // 標準ヘッダー表示時の設定
     var set_position_absolute = function(){
-        $('#gantt_area_header_fixed').hide();
-        $('#gantt_area_header_fixed').css('position', 'absolute');
+        $('#gantt_area_header_fixed_outer').hide();
         $('#gantt_subjects_container_fixed').css('position', 'absolute');
         $('.gantt_hdr_selected_column_name').parent().css('position', 'absolute');
     }
@@ -86,17 +97,22 @@ $(function() {
     // 各項目の幅変更イベント
     $('td.gantt_subjects_column, td.gantt_selected_column').on('resize', function() {
         $('#gantt_subjects_container_fixed .gantt_hdr').css('width', $('.gantt_subjects_column').css('width'));
+        set_width();
         set_position();
     });
 
     // ウィンドウリサイズイベント
     $(window).resize(function() {
+        set_width();
         set_position();
     });
 
     // hideSidebar プラグインをサポート
     $('#hideSidebarButton').on('click', function() {
+        set_width();
         set_position();
     });
+
+    window.setTimeout(set_width, 10);
 });
 ```
