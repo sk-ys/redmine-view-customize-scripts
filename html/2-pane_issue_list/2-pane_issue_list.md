@@ -15,9 +15,8 @@
 - [redmine_issue_dynamic_edit](https://www.redmine.org/plugins/redmine_issue_dynamic_edit)
 - [sidebar_hide](https://www.redmine.org/plugins/sidebar_hide)
 
-## 注意・既知の問題
+## 注意
 - HTMLのDOM階層を変更しているため，その他のプラグイン等が正常に動作しなくなる可能性があります．
-- サイドバーの表示項目が何も無い場合に対応できていません（表示が崩れます）．
 - チケット詳細画面内のサイドバーにはウォッチャー以外の項目は表示されません．
 
 ## イメージ
@@ -290,6 +289,14 @@
             } else {
                 getIssueList(document.location.href, updateIssueList);
             }
+			
+			if ($('#sidebar').is(':visible') !== $('#sidebar', $iframe.contents()).is(':visible')) {
+				if ($('#sidebar').is(':visible')) {
+					$('#sidebar', $iframe.contents()).show();
+				} else {
+					$('#sidebar').show();
+				}
+			}
 
             visibleIframe();
         });
@@ -374,12 +381,14 @@
         display: flex;
         flex-direction: column;
         flex-grow: 1;
+		width: 100%;
     }
 
     #main_wrapper2 {
         display: flex;
         flex-direction: row-reverse;
         flex-grow: 1;
+		width: 100%;
     }
 
     #iframe_issue_detail {
