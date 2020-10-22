@@ -38,6 +38,8 @@
         var USE_COOKIE = true;
         // 2ペイン表示モード時のチケット一覧画面の高さ
         var INITIAL_HEIGHT_OF_ISSUE_LIST_PANE = '30vh';
+        // 2ペイン表示モード時のチケット一覧画面の最小高さ
+        var MIN_HEIGHT_OF_ISSUE_LIST_PANE = 50;
         // ----------------
 
 
@@ -79,7 +81,7 @@
             if (typeof height === 'undefined' || height === '') {
                 height = INITIAL_HEIGHT_OF_ISSUE_LIST_PANE;
             }
-            $('#wrapper3').css('height', '100vh'); // suppoet IE11
+            $('#wrapper3').css('height', '100vh'); // support IE11
             $('#main').css('max-height', height);
             $('#main_wrapper1').css('max-height', height);
             $('#main_wrapper1').css('overflow-y', 'scroll');
@@ -95,7 +97,7 @@
         var hideDetail = function () {
             $('#iframe_issue_detail_wrapper').hide();
             $('#main div.ui-resizable-handle').hide();
-            $('#wrapper3').css('height', ''); // suppoet IE11
+            $('#wrapper3').css('height', ''); // support IE11
             $('#main').css('max-height', '');
             $('#main').css('height', ''); // for resizeable
             $('#main_wrapper1').css('max-height', '');
@@ -183,7 +185,7 @@
         }
 
 
-        let getIssueList = function (path, callback) {
+        var getIssueList = function (path, callback) {
             $.get(path).done(function (data) {
                 var content = $('table.list.issues', $(data)).first().html();
                 callback(content);
@@ -191,7 +193,7 @@
         }
 
 
-        let updateIssueList = function (contentNew) {
+        var updateIssueList = function (contentNew) {
             $('#content table.list.issues:first').empty();
             $('#content table.list.issues:first').append($(contentNew).children());
             updateState();
@@ -289,14 +291,15 @@
             } else {
                 getIssueList(document.location.href, updateIssueList);
             }
-			
-			if ($('#sidebar').is(':visible') !== $('#sidebar', $iframe.contents()).is(':visible')) {
-				if ($('#sidebar').is(':visible')) {
-					$('#sidebar', $iframe.contents()).show();
-				} else {
-					$('#sidebar').show();
-				}
-			}
+
+            if ($('#sidebar').is(':visible') !== $('#sidebar', $iframe.contents()).is(':visible') &&
+                typeof $('#hideSidebarButton') === 'undefined' ) {
+                if ($('#sidebar').is(':visible')) {
+                    $('#sidebar', $iframe.contents()).show();
+                } else {
+                    $('#sidebar').show();
+                }
+            }
 
             visibleIframe();
         });
@@ -312,8 +315,7 @@
         // resizeable
         $('#main').resizable({
             handles: 's',
-            minHeight: 200,
-            autoHide: true,
+            minHeight: MIN_HEIGHT_OF_ISSUE_LIST_PANE,
             start: function () {
                 $("#wrapper3").each(function (index, element) {
                     var d = $('<div class="iframe_cover"></div>');
@@ -381,25 +383,31 @@
         display: flex;
         flex-direction: column;
         flex-grow: 1;
-		width: 100%;
+        width: 100%;  /* support IE11 */
     }
 
     #main_wrapper2 {
         display: flex;
         flex-direction: row-reverse;
         flex-grow: 1;
-		width: 100%;
+        width: 100%;  /* support IE11 */
     }
 
     #iframe_issue_detail {
         flex-grow: 1;
-        border: 1px solid #e4e4e4;
-        min-height: 100%;  /* suppoet IE11 */
+        border-width: 0;
+        min-height: 100%;  /* support IE11 */
+        overflow-y: scroll;
     }
 
     #iframe_issue_detail_wrapper {
         flex-grow: 1;
         display: flex;
+        z-index: 15;  /* support hide_sidebar plugin */
+    }
+
+    #main>div.ui-resizable-handle{
+        background-color: #e4e4e4;
     }
 </style>
 ```
