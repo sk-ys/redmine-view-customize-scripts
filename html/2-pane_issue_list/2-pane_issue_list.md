@@ -200,6 +200,26 @@
         }
 
 
+        var getIframeWindow = function () {
+            var $iframe = $('#iframe_issue_detail');
+            if (typeof $iframe === 'undefined') return;
+            var window_iframe = $iframe[0].contentWindow;
+            if (window_iframe === window) return;
+            return window_iframe;
+        }
+
+
+        var setSidebarWidth = function () {
+            var $iframe = $('#iframe_issue_detail');
+            var window_iframe = getIframeWindow();
+            if (typeof window_iframe === 'undefined') return;
+            $('#sidebar', $iframe.contents()).css('width', $('#sidebar').css('width'));
+        }
+        $(window).on('resize', function () {
+            setSidebarWidth();
+        });
+
+
         // ----- object settings -----
         // add checkbox
         if (USE_COOKIE) {
@@ -302,6 +322,7 @@
             }
 
             visibleIframe();
+            setSidebarWidth();
         });
 
 
@@ -358,8 +379,8 @@
             // replace function in iframe
             $iframe.on('load', function () {
                 if ($iframe.attr('src') === '') return;
-                var window_iframe = $iframe[0].contentWindow;
-                if (typeof window_iframe === 'undefined' || window_iframe === window) return;
+                var window_iframe = getIframeWindow();
+                if (typeof window_iframe === 'undefined') return;
                 window_iframe.hideSideBarOrg = window_iframe.hideSideBar;
                 window_iframe.hideSideBar = function () {
                     window_iframe.hideSideBarOrg();
