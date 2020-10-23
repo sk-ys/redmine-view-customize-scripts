@@ -358,6 +358,11 @@
                 $('#main').css('max-height', ui.size.height);
                 $('#main_wrapper1').css('max-height', ui.size.height);
                 $('#main').data('height', ui.size.height)
+            },
+            create: function (event, ui) {
+                $('#main>.ui-resizable-handle').on('dblclick', function () {
+                    hideDetail();
+                });
             }
         });
 
