@@ -242,12 +242,12 @@
                 4. restoring events
                 */
 
-                // 1. updat gantt subjects container
+                // 1. update gantt subjects container
                 update_gantt_object(
                     '.gantt_subjects_container .gantt_hdr',
                     ['width'], false)
                 update_gantt_object('.gantt_subjects_container', ['width']);
-                // set width (gantt.js)
+                // set width (copy from gantt.js)
                 $('.issue-subject, .project-name, .version-name').each(function(){
                     $(this).width($(".gantt_subjects_column").width()-$(this).position().left);
                 });
@@ -262,14 +262,15 @@
                 // 3. update gantt area
                 update_gantt_object('#gantt_area');
 
-                // 4. restoring events (gantt.js)
+                // 4. restor the events (copy from gantt.js)
                 draw_gantt = null;
                 drawGanttHandler()
                 $('div.gantt_subjects .expander').on('click', ganttEntryClick);
 
+                // finally
                 $gantt_table_temp.remove();
                 updateState();
-                }
+            }
 
             $gantt_table_temp.load(
                 url + ' table.gantt-table > tbody', afterLoad
