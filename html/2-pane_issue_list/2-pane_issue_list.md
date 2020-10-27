@@ -1,8 +1,9 @@
-# チケット一覧画面2ペイン化
+# チケット一覧画面＆ガントチャート画面を2ペイン化
 ## 説明
-チケット一覧画面を2ペイン化し，チケット一覧とチケット詳細を1画面内に同時に表示します．  
-これにより，チケット一覧を確認しながら，チケット詳細の確認と編集が可能になります．  
-また，チケット詳細画面で行った変更は都度チケット一覧画面に反映されます．  
+対象の画面を2ペイン化し，対象の画面とチケット詳細を1画面内に同時に表示します．  
+これにより，対象の画面を確認しながら，チケット詳細の確認と編集が可能になります．  
+また，チケット詳細画面で行った変更は都度対象の画面に反映されます．  
+現在，チケット一覧画面，ガントチャート画面に対応しています．
 
 ## 動作確認済環境
 ### Redmine
@@ -21,9 +22,10 @@
 
 ## イメージ
 ![after](after.png)
+![after2](after2.png)
 
 ## View Customize plugin 設定
-- パスのパターン: /issues$
+- パスのパターン: /(issues|gantt)$
 - 種別: HTML
 
 ## コード
@@ -36,15 +38,24 @@
         var SET_INITIAL_STATE_TO_2PANEMODE = false;
         // 表示モードをCookieに保持する（Cookieに保存された値が優先されます）
         var USE_COOKIE = true;
-        // 2ペイン表示モード時のチケット一覧画面の高さ
-        var INITIAL_HEIGHT_OF_ISSUE_LIST_PANE = '30vh';
-        // 2ペイン表示モード時のチケット一覧画面の最小高さ
-        var MIN_HEIGHT_OF_ISSUE_LIST_PANE = 50;
+        // 2ペイン表示モード時のメインペインの高さ
+        var INITIAL_HEIGHT_OF_MAIN_PANE = '30vh';
+        // 2ペイン表示モード時のメインペインの最小高さ
+        var MIN_HEIGHT_OF_MAIN_PANE = 50;
         // ----------------
 
 
-        var targetAnchor = function () {
-            return $('#content table.list.issues').find('td.id a, td.subject a');
+        if (document.location.pathname.match(/issues$/g)) {
+            var targetAnchor = function () {
+                return $('#content table.list.issues').find('td.id a, td.subject a');
+            }
+        } else if (document.location.pathname.match(/gantt$/g)) {
+            var targetAnchor = function () {
+                return $('table.gantt-table').find(
+                    'div.gantt_subjects a.issue, #gantt_area span.tip a.issue');
+            }
+        } else {
+            return;
         }
 
 
@@ -79,7 +90,7 @@
         var showDetail = function () {
             var height = $('#main').data('height');
             if (typeof height === 'undefined' || height === '') {
-                height = INITIAL_HEIGHT_OF_ISSUE_LIST_PANE;
+                height = INITIAL_HEIGHT_OF_MAIN_PANE;
             }
             $('#wrapper3').css('height', '100vh'); // support IE11
             $('#main').css('max-height', height);
@@ -90,13 +101,13 @@
                 $('#main_wrapper1').css('width', '100%');
             }); // support IE11
             $('#iframe_issue_detail_wrapper').show();
-            $('#main div.ui-resizable-handle').show();
+            $('#main>div.ui-resizable-handle').show();
         }
 
 
         var hideDetail = function () {
             $('#iframe_issue_detail_wrapper').hide();
-            $('#main div.ui-resizable-handle').hide();
+            $('#main>div.ui-resizable-handle').hide();
             $('#wrapper3').css('height', ''); // support IE11
             $('#main').css('max-height', '');
             $('#main').css('height', ''); // for resizeable
@@ -185,18 +196,97 @@
         }
 
 
-        var getIssueList = function (path, callback) {
-            $.get(path).done(function (data) {
-                var content = $('table.list.issues', $(data)).first().html();
-                callback(content);
+        var updateIssueList = function () {
+            var url = document.location.href;
+            $.get(url).done(function (data) {
+                var contentNew = $('table.list.issues', $(data)).first().parent().html();
+                $('table.list.issues:first').replaceWith($(contentNew));
+                updateState();
             });
         }
 
 
-        var updateIssueList = function (contentNew) {
-            $('#content table.list.issues:first').empty();
-            $('#content table.list.issues:first').append($(contentNew).children());
-            updateState();
+        var updateGanttTable = function () {
+            var url = document.location.href;
+            var style_display = $('.gantt_selected_column').css('display');
+            var $gantt_table_org = $('#content table.gantt-table:first');
+
+            // insert temporary gantt-table
+            var $gantt_table_temp = $('<table class="gantt-table"></table>');
+            $gantt_table_temp.insertAfter($gantt_table_org);
+            $gantt_table_temp.hide();
+
+            var update_gantt_object = function (selector, keep_style, replace) {
+                if(typeof keep_style === 'undefined') keep_style = [];  // support ie11
+                if(typeof replace === 'undefined') replace = true;  // support ie11
+
+                var list_$org = $gantt_table_org.find(selector);
+                var list_$temp = $gantt_table_temp.find(selector);
+
+                for (i = 0; i<list_$org.length; i++) {
+                    var $org = $(list_$org[i]);
+                    var $temp = $(list_$temp[i]);
+                    for (j=0; j<keep_style.length; j++) {
+                        $temp.css(keep_style[j], $org.css(keep_style[j]));
+                    }
+                    if (replace) {
+                        $($org).replaceWith($temp);
+                    }
+                }
+            }
+
+            var afterLoad = function () {
+
+                /*
+                target for update
+                1. .gantt_subjects_container
+                2. .gantt_selected_column_container
+                3. #gantt_area
+                4. restoring events
+                */
+
+                // 1. update gantt subjects container
+                update_gantt_object(
+                    '.gantt_subjects_container .gantt_hdr',
+                    ['width'], false)
+                update_gantt_object('.gantt_subjects_container', ['width']);
+                // set width (copy from gantt.js)
+                $('.issue-subject, .project-name, .version-name').each(function () {
+                    $(this).width($(".gantt_subjects_column").width()-$(this).position().left);
+                });
+
+                // 2. update selected columns container
+                update_gantt_object(
+                    '.gantt_selected_column_container .gantt_hdr',
+                    ['width'], false)
+                update_gantt_object(
+                    '.gantt_selected_column_container', ['width']);
+
+                // 3. update gantt area
+                update_gantt_object('#gantt_area');
+
+                // 4. restor the events (copy from gantt.js)
+                draw_gantt = null;
+                drawGanttHandler()
+                $('div.gantt_subjects .expander').on('click', ganttEntryClick);
+
+                // finally
+                $gantt_table_temp.remove();
+                updateState();
+            }
+
+            $gantt_table_temp.load(
+                url + ' table.gantt-table > tbody', afterLoad
+            );
+        }
+
+
+        var updateMainTable = function () {
+            if (document.location.pathname.match(/issues$/g)) {
+                updateIssueList();
+            } else if (document.location.pathname.match(/gantt$/g)) {
+                updateGanttTable();
+            }
         }
 
 
@@ -276,17 +366,16 @@
             $('#sidebar>*:not(#watchers)', $iframe.contents()).hide();
 
             // observe update detail
-            var updateIssueListBuffer
+            var updateBuffer
             var observerUpdateDetail =
                 new MutationObserver(function (mutations) {
                     mutations.forEach(function (mutationRecord) {
-                        if (typeof updateIssueListBuffer === 'number') {
-                            clearTimeout(updateIssueListBuffer);
+                        if (typeof updateBuffer === 'number') {
+                            clearTimeout(updateBuffer);
                         }
                         if (!$(mutationRecord.target).is(':visible')) {
-                            updateIssueListBuffer = setTimeout(function () {
-                                getIssueList(document.location.href,
-                                    updateIssueList);
+                            updateBuffer = setTimeout(function () {
+                                updateMainTable();
                             }, 1000);
                         }
                     });
@@ -309,7 +398,7 @@
                 });
                 showDetail();
             } else {
-                getIssueList(document.location.href, updateIssueList);
+                updateMainTable();
             }
 
             if ($('#sidebar').is(':visible') !== $('#sidebar', $iframe.contents()).is(':visible') &&
@@ -336,7 +425,7 @@
         // resizeable
         $('#main').resizable({
             handles: 's',
-            minHeight: MIN_HEIGHT_OF_ISSUE_LIST_PANE,
+            minHeight: MIN_HEIGHT_OF_MAIN_PANE,
             start: function () {
                 $("#wrapper3").each(function (index, element) {
                     var d = $('<div class="iframe_cover"></div>');
@@ -357,7 +446,7 @@
             resize: function (event, ui) {
                 $('#main').css('max-height', ui.size.height);
                 $('#main_wrapper1').css('max-height', ui.size.height);
-                $('#main').data('height', ui.size.height)
+                $('#main').data('height', ui.size.height);
             },
             create: function (event, ui) {
                 $('#main>.ui-resizable-handle').on('dblclick', function () {
@@ -369,7 +458,7 @@
 
         // support hide_sidebar plugin
         // https://www.redmine.org/plugins/sidebar_hide
-        if (typeof hideSideBar === 'function') {
+        if (typeof window.hideSideBar === 'function') {
             // replace function in parent window
             window.hideSideBarOrg = window.hideSideBar;
             window.hideSideBar = function () {
