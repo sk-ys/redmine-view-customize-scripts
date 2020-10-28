@@ -38,7 +38,7 @@
     $(function () {
         // 基本設定
         // settings
-        var MIIN_GANTT_HEIGHT = 750;
+        var MIN_GANTT_HEIGHT = 750;
         var SCROLLBAR_WIDTH = 17;
         var SCROLL_DELTA = 100;
 
@@ -142,8 +142,8 @@
         // チャートエリアの高さを設定する関数を定義
         var set_gant_area_height = function (flg_2nd_try) {
             if (typeof flg_2nd_try === 'undefined') flg_2nd_try = false;
-            // var window_height = $(window).height();
-            var window_height = $('#top-menu').height() + $('#header').height() + $('#main').height();
+            var window_height = $(window).height();
+            // var window_height = $('#top-menu').height() + $('#header').height() + $('#main').height();
 
             // チェックボックスがオフの場合はチャート高さを初期値とする
             if (!$('#fix_gantt_height').is(':checked')) {
@@ -154,7 +154,7 @@
             }
 
             // Windowの高さが小さすぎる場合はチャート高さをWindowの高さとする
-            if (window_height < MIIN_GANTT_HEIGHT) {
+            if (window_height < MIN_GANTT_HEIGHT) {
                 $('#gantt_area').height(window_height);
                 gantt_subjects_container.height(window_height);
                 gantt_subjects_columns_div.height(window_height);
@@ -162,18 +162,32 @@
             }
 
             // チャート高さを画面高さに合うように調整する
-            var max_height = $(document).height() - window_height;
-            if (max_height <= 0) {
-                if (flg_2nd_try) return
-                $('#gantt_area').height(window_height);
-                set_gant_area_height(true);
+            // var overflow_height = $(document).height() - window_height;
+            if ($('#main').next().position()['top'] > 0 && $('table.gantt-table').position()['top'] !== $('#main').next().position()['top']) {
+                var overflow_height = $('table.gantt-table').position()['top'] - $('#main').next().position()['top'];
             } else {
-                var current_height = $('#gantt_area').height();
-                $('#gantt_area').height(current_height - max_height);
-                gantt_subjects_container.height(
-                    current_height - max_height - SCROLLBAR_WIDTH);
-                gantt_subjects_columns_div.height(
-                    current_height - max_height - SCROLLBAR_WIDTH);
+                // var overflow_height = window_height - $('#footer').height() - $('table.gantt-table').position()['top'];
+                // var overflow_height = window_height - $('#footer').height();
+                // var overflow_height = $(document).height() - window_height;
+                var overflow_height = $(document).height() - window_height;
+            }
+
+            var current_height = $('#gantt_area').height();
+            
+            if (overflow_height <= 0) {
+                if (flg_2nd_try) return
+                // $('#gantt_area').height(window_height);
+                var max_height = window_height;
+            } else {
+                var max_height = current_height - overflow_height;
+            }
+
+            $('#gantt_area').height(max_height);
+            gantt_subjects_container.height(max_height - SCROLLBAR_WIDTH);
+            gantt_subjects_columns_div.height(max_height - SCROLLBAR_WIDTH);
+
+            if (overflow_height <= 0) {
+                set_gant_area_height(true);
             }
         }
 
@@ -377,7 +391,7 @@
         }
 
 
-        var updateBuffer
+        var updateBuffer = null;
         var observer =
             new MutationObserver(function (mutations) {
                 if (typeof updateBuffer === 'number') {
