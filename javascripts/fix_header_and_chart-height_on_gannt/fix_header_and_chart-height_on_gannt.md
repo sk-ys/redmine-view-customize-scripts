@@ -40,7 +40,7 @@
         // settings
         var MIN_GANTT_HEIGHT = 750;
         var SCROLLBAR_WIDTH = 17;
-        var SCROLL_DELTA = 100;
+        var SCROLL_DELTA = 50;
 
         var initial_height = $('#gantt_area').height();
         var scroll_top_old = 0;
@@ -192,7 +192,7 @@
         }
 
         // ヘッダー固定状態とフロー状態を切り替える
-        var set_state_header = function () {
+        var set_header_state = function () {
             if (!$('#fix_header').is(':checked')) {
                 $('#gantt_subjects_container_fixed').css({
                     position: 'absolute',
@@ -222,10 +222,10 @@
         }
 
         // チャート高さ固定状態と初期状態を切り替える
-        var set_state_gantt_height = function () {
+        var set_gantt_height_state = function () {
             if (!$('#fix_gantt_height').is(':checked')) {
                 $('#fix_header').prop('checked', false);
-                set_state_header();
+                set_header_state();
                 $(
                     'div.gantt_subjects_container, ' + 
                     'div.gantt_selected_column_container').css({
@@ -261,8 +261,8 @@
 
 
         // イベント追加用メソッド
-        var add_event = function ($obj, event_name, event) {
-            var tag_name = 'event_added_' + event_name;
+        var add_event_with_label = function ($obj, event_name, event) {
+            var tag_name = 'fixed_gantt_plugin_event_added_' + event_name;
             if ($obj.data(tag_name)) return;
             $obj.on(event_name, event)
             $obj.data(tag_name, 1);
@@ -271,30 +271,39 @@
 
         var add_events = function () {
             // ヘッダー固定チェックボックス用クリックイベント
-            add_event($('#fix_header'), 'click',
+            add_event_with_label($('#fix_header'), 'click',
                 function () {
                     if ($(this).is(':checked') && !$('#fix_gantt_height').is(':checked')) {
                         $('#fix_gantt_height').prop('checked', true);
-                        set_state_gantt_height();
+                        set_gantt_height_state();
                         set_gant_area_height();
                     }
-                    set_state_header();
+                    set_header_state();
                     set_position_fixed();
                 });
 
 
             // チャート高さ固定チェックボックス用クリックイベント
-            add_event($('#fix_gantt_height'), 'click',
+            add_event_with_label($('#fix_gantt_height'), 'click',
                 function () {
                     set_gant_area_height();
-                    set_state_gantt_height();
+                    set_gantt_height_state();
                 });
 
             // ウィンドウスクロールイベント
-            add_event($(document), 'click', set_position_fixed);
+            add_event_with_label($(document), 'scroll', function () {
+                set_header_state();
+                set_position_fixed();
+            });
+
+            // support 2-pain mode
+            add_event_with_label($('#main_wrapper1'), 'scroll', function () {
+                set_header_state();
+                set_position_fixed();
+            });
 
             // ガントチャートエリアスクロールイベント
-            add_event($('#gantt_area'), 'scroll',
+            add_event_with_label($('#gantt_area'), 'scroll',
                 function () {
                     var scroll_top = $('#gantt_area').scrollTop();
                     if (scroll_top_old !== scroll_top) {
@@ -307,13 +316,13 @@
                 });
 
             // 各オプションの幅変更イベント
-            add_event(gantt_subjects_columns, 'resize',
+            add_event_with_label(gantt_subjects_columns, 'resize',
                 function () {
                     $(
                         '#gantt_subjects_container_fixed .gantt_hdr'
                     ).css('width', $('.gantt_subjects_column').css('width'));
-                    set_state_header();
-                    set_position_fixed(flg_left_only=true);
+                    set_header_state();
+                    set_position_fixed();
                 });
 
             // フィルター，オプション関連ボタンクリックイベント
@@ -325,7 +334,7 @@
                 ]
 
                 for (var i=0; i<target_list.length; i++) {
-                    add_event(
+                    add_event_with_label(
                         $(target_list[i]), 'click',
                         function () {
                             window.setTimeout(function () {
@@ -338,11 +347,11 @@
             add_fiter_and_option_event()
 
             // ウィンドウリサイズイベント
-            add_event(
+            add_event_with_label(
                 $(window), 'resize',
                 function () {
                     set_gant_area_height();
-                    set_state_header();
+                    set_header_state();
                     set_position_fixed();
                 });
 
@@ -356,7 +365,7 @@
                 ]
 
                 for (var i=0; i<target_list.length; i++) {
-                    add_event($(target_list[i]), 'mousewheel DOMMouseScroll',
+                    add_event_with_label($(target_list[i]), 'mousewheel DOMMouseScroll',
                         function(event){
                         if (event.originalEvent.wheelDelta > 0 || event.originalEvent.detail < 0) {
                             // scroll up
@@ -374,7 +383,7 @@
             add_wheel_event();
 
             // hideSidebar plugin 向け設定
-            add_event($('#hideSidebarButton'), 'click', set_state_header);
+            add_event_with_label($('#hideSidebarButton'), 'click', set_header_state);
         }
 
         // 各種関数の初回適用
@@ -382,9 +391,9 @@
             console.log('initialize');
             window.setTimeout(function () {
                 preprocessing();
-                set_state_gantt_height();
+                set_gantt_height_state();
                 set_gant_area_height();
-                set_state_header();
+                set_header_state();
                 set_position_fixed();
                 add_events();
             }, 10);
