@@ -39,7 +39,7 @@
         // 基本設定
         // settings
         const MIN_GANTT_HEIGHT = 300;
-        const SCROLL_DELTA = 20;
+        const SCROLL_DELTA = 10;
         const LABEL_FIX_GANTT_HEIGHT = 'チャート高さ固定';
         const LABEL_FIX_HEADER = 'ヘッダー固定';
 
@@ -364,7 +364,7 @@
 
                 for (var i=0; i<target_list.length; i++) {
                     add_event_with_label($(target_list[i]), MOUSE_WHEEL_EVENT, function(event) {
-                        if (event.originalEvent.wheelDelta > 0 || event.originalEvent.detail < 0) {
+                        if (event.originalEvent.wheelDelta > 0 || event.originalEvent.deltaY < 0 || event.originalEvent.detail < 0) {
                             // scroll up
                             $('#gantt_area').scrollTop(
                                 $('#gantt_area').scrollTop() - SCROLL_DELTA);
@@ -425,11 +425,11 @@
                             });
                     }, 1000);
                 });
-                observer_table_child_list_change.observe(
-                $('table.gantt-table:first')[0], {
-                    childList : true,
-                    subtree: true
-                });
+            observer_table_child_list_change.observe(
+            $('table.gantt-table:first')[0], {
+                childList : true,
+                subtree: true
+            });
 
             var observer_rsize_main =
                 new MutationObserver(function (mutations) {
