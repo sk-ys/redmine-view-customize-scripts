@@ -9,3 +9,4 @@ onozaty氏の https://github.com/onozaty/redmine-view-customize-scripts を踏�
 * [チケット一覧画面＆ガントチャート画面を2ペイン化](./html/2-pane_issue_list/2-pane_issue_list.md)
 * [通知バーに閉じるボタンを追加する](./javascripts/nortification_close_button/nortification_close_button.md)
 * [ヘッダーの表示・非表示を切り替え可能にするボタンを追加する](./javascripts/hide_header/hide_header.md)
+* [共有バージョン使用時のガントチャートの動作を修正](./javascripts/fixed_gantt_chart_when_using_shared_version/fixed_gantt_chart_when_using_shared_version.md)
