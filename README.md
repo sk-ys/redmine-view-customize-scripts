@@ -8,3 +8,4 @@ onozaty氏の https://github.com/onozaty/redmine-view-customize-scripts を踏�
 * [ガントチャートのトラッカー名とチケットID，チケット名の区別を明確にする](./stylesheets/define_tracker_name_and_issue_id-name_on_gantt/define_tracker_name_and_issue_id-name_on_gantt.md)
 * [チケット一覧画面＆ガントチャート画面を2ペイン化](./html/2-pane_issue_list/2-pane_issue_list.md)
 * [通知バーに閉じるボタンを追加する](./javascripts/nortification_close_button/nortification_close_button.md)
+* [ヘッダーの表示・非表示を切り替え可能にするボタンを追加する](./javascripts/hide_header/hide_header.md)
