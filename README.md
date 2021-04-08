@@ -12,3 +12,4 @@ onozaty氏の https://github.com/onozaty/redmine-view-customize プラグイン�
 * [共有バージョン使用時のガントチャートの動作を修正](./javascripts/fixed_gantt_chart_when_using_shared_version/fixed_gantt_chart_when_using_shared_version.md)
 * [チケット編集時に表示される項目を限定する](./javascripts/restricting_the_display_of_issue_attributes/restricting_the_display_of_issue_attributes.md)
 * [チケット一覧画面でワイド表示項目を1行内に表示する](./html/1line_issue_list/1line_issue_list.md)
+* [PDFとHTMLのプレビューを有効にする](./javascripts/preview_pdf_and_html/preview_pdf_and_html.md)
