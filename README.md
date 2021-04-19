@@ -13,3 +13,4 @@ onozaty氏の https://github.com/onozaty/redmine-view-customize プラグイン�
 * [チケット編集時に表示される項目を限定する](./javascripts/restricting_the_display_of_issue_attributes/restricting_the_display_of_issue_attributes.md)
 * [チケット一覧画面でワイド表示項目を1行内に表示する](./html/1line_issue_list/1line_issue_list.md)
 * [PDFとHTMLのプレビューを有効にする](./javascripts/preview_pdf_and_html/preview_pdf_and_html.md)
+* [ページ最上部または最下部にスクロールするボタンを追加する](./javascripts/scroll_to_top_or_bottom/scroll_to_top_or_bottom.md)
