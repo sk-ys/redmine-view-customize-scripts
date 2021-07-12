@@ -171,6 +171,13 @@ $(function () {
 
             setFilecontentContainerHeightAnyType($iframe);
 
+            // Adjust the size of the SVG to the window
+            var $svg_content = $iframe.contents().find('body>svg');
+            if ($svg_content.length > 0)
+            {
+                $svg_content.attr('width', '100%').attr('height', '100%');
+            }
+
             $targets.each(function() {
                 this.click();
             });
