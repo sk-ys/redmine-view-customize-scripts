@@ -33,7 +33,7 @@
 ```JavaScript
 $(function () {
     // --- settings ---
-    const SUPPORTED_EXTENSIONS = ['pdf', 'html'];
+    const SUPPORTED_EXTENSIONS = ['pdf', 'html', 'svg'];
     const MIN_HEIGHT = '300px';
     const CODE_TITLE = 'コード';
     const PREVIEW_TITLE = 'プレビュー';
@@ -129,7 +129,7 @@ $(function () {
 
         $.ajax({
             url: html_filepath,
-            context: document
+            dataType: 'text'
         }).done(function (data) {
             var $code = $filecontent_container.children('div:first');
             var $iframe = generateIframe();
@@ -188,7 +188,7 @@ $(function () {
     // preview
     if (extension == 'pdf') {
         addPdfPreviewer(filepath);
-    } else if (extension == 'html') {
+    } else if (extension == 'html' || extension == 'svg') {
         addHtmlPreviewer(filepath);
     }
 });
