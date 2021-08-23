@@ -8,7 +8,7 @@ onozaty氏の https://github.com/onozaty/redmine-view-customize プラグイン�
 * [ガントチャートのトラッカー名とチケットID，チケット名の区別を明確にする](./stylesheets/define_tracker_name_and_issue_id-name_on_gantt/define_tracker_name_and_issue_id-name_on_gantt.md)
 * [チケット一覧画面＆ガントチャート画面を2ペイン化](./html/2-pane_issue_list/2-pane_issue_list.md)
 * [通知バーに閉じるボタンを追加する](./javascripts/nortification_close_button/nortification_close_button.md)
-* [ヘッダーの表示・非表示を切り替え可能にするボタンを追加する](./javascripts/hide_header/hide_header.md)
+* [ヘッダーの表示・非表示を切り替え可能にする](./html/hide_header/hide_header.md)
 * [共有バージョン使用時のガントチャートの動作を修正](./javascripts/fixed_gantt_chart_when_using_shared_version/fixed_gantt_chart_when_using_shared_version.md)
 * [チケット編集時に表示される項目を限定する](./javascripts/restricting_the_display_of_issue_attributes/restricting_the_display_of_issue_attributes.md)
 * [チケット一覧画面でワイド表示項目を1行内に表示する](./html/1line_issue_list/1line_issue_list.md)
