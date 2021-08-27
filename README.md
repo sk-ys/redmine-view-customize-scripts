@@ -11,6 +11,7 @@ onozaty氏の https://github.com/onozaty/redmine-view-customize プラグイン�
 * [チケット編集時に表示される項目を限定する](./javascripts/restricting_the_display_of_issue_attributes/restricting_the_display_of_issue_attributes.md)
 * [PDFとHTMLのプレビューを有効にする](./javascripts/preview_pdf_and_html/preview_pdf_and_html.md)
 * [ページ最上部または最下部にスクロールするボタンを追加する](./javascripts/scroll_to_top_or_bottom/scroll_to_top_or_bottom.md)
+* [ガントチャートの題名列の幅を変更する](./javascripts/change_column_width_of_gantt/change_column_width_of_gantt.md)
 
 ## CSS
 * [ガントチャートのトラッカー名とチケットID，チケット名の区別を明確にする](./stylesheets/define_tracker_name_and_issue_id-name_on_gantt/define_tracker_name_and_issue_id-name_on_gantt.md)
