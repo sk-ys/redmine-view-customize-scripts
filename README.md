@@ -22,3 +22,4 @@ onozaty氏の https://github.com/onozaty/redmine-view-customize プラグイン�
 * [チケット一覧画面＆ガントチャート画面を2ペイン化](./html/2-pane_issue_list/2-pane_issue_list.md)
 * [ヘッダーの表示・非表示を切り替え可能にする](./html/hide_header/hide_header.md)
 * [チケット編集時にコメント入力欄のみを表示する](./html/display_only_comment_field/display_only_comment_field.md)
+* [どこでもポップアップ](./html/popup_anywhere/popup_anywhere.md)
