@@ -23,7 +23,7 @@ Ctrl + Click で内部リンクの内容をポップアップウィンドウ内�
     //<![CDATA[
     $(function () {
         // ----- settings start -----
-        const REDMINE_URL = window.location.origin + $('#top-menu a.home').attr('href');
+        const REDMINE_URL = window.location.origin + $('a.home:first').attr('href');
         let popup_width_global = 1000;
         let popup_height_global = 600;
 
