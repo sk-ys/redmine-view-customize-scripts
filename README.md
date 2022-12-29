@@ -24,3 +24,4 @@ onozaty氏の https://github.com/onozaty/redmine-view-customize プラグイン�
 * [チケット編集時にコメント入力欄のみを表示する](./html/display_only_comment_field/display_only_comment_field.md)
 * [どこでもポップアップ](./html/popup_anywhere/popup_anywhere.md)
 * [画像挿入ダイアログ](./html/insert_image_dialog/insert_image_dialog.md)
+* [シンプルメニューバー](./html/simple_menu_bar/simple_menu_bar.md)
