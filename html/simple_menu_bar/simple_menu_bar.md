@@ -19,11 +19,6 @@
 - Edge 108.0.1462.54
 - Firefox 108.0.1
 
-### 既知の課題
-
-- 画面遷移時にヘッダーが瞬間的に表示されることによるチラツキが発生
-  - Firefox では緩和されることを確認済み
-
 ## イメージ
 
 ### 1. プロジェクト一覧メニュー
@@ -49,6 +44,7 @@
 ## View Customize plugin 設定
 
 - パスのパターン:
+- 挿入位置: 全ページのヘッダ
 - 種別: HTML
 
 ## コード
@@ -56,6 +52,15 @@
 ```html
 <script>
   //<![CDATA[
+
+  // If the saved visibility setting is false, apply the following style that hides the header.
+  // Then remove this style after the DOM has finished loading.
+  if (localStorage.getItem("header-visibility") === "false") {
+    $("head").append(
+      '<style class="simple-menu-bar">#header{display: none;}</style>'
+    );
+  }
+
   window.addEventListener("DOMContentLoaded", () => {
     // ----- i18n -----
     const lang = document.documentElement.lang;
@@ -400,17 +405,17 @@
         position: "",
         width: "",
         height: "",
-        "z-index": "",
+        zIndex: "",
         top: "",
-        "box-sizing": "",
+        boxSizing: "",
       };
 
       const $btn = $("<a />")
         .attr("id", "hide-header-btn")
         .css({
           cursor: "pointer",
-          "background-image": "url(" + homePath + "images/arrow_down.png)",
-          "padding-left": "16px",
+          backgroundImage: "url(" + homePath + "images/arrow_down.png)",
+          paddingLeft: "16px",
           height: "16px",
         })
         .addClass("icon icon-only");
@@ -424,7 +429,7 @@
             visibility: "visible",
             padding: "",
             height: "",
-            "min-height": "",
+            minHeight: "",
           });
           $btn
             .attr("title", resources.hideHeader)
@@ -436,9 +441,9 @@
         } else {
           $header.css({
             visibility: "hidden",
-            padding: "0",
-            height: "0",
-            "min-height": 0,
+            padding: 0,
+            height: 0,
+            minHeight: 0,
           });
           $btn.attr("title", resources.showHeader).css({ transform: "" });
 
@@ -459,14 +464,14 @@
             $header
               .css({
                 position: "fixed",
-                "z-index": 200,
+                zIndex: 200,
                 top: defaultTopMenuHeight,
                 width: "100%",
-                "box-sizing": "border-box",
+                boxSizing: "border-box",
                 visibility: "visible",
                 padding: "",
                 height: defaultHeaderHeight,
-                "min-height": "",
+                minHeight: "",
               })
               .addClass("fixed");
           }
@@ -476,9 +481,9 @@
               .css(emptyStyle)
               .css({
                 visibility: "hidden",
-                padding: "0",
-                height: "0",
-                "min-height": 0,
+                padding: 0,
+                height: 0,
+                minHeight: 0,
               })
               .removeClass("fixed");
           }
@@ -490,22 +495,22 @@
           $topMenu
             .css({
               position: "fixed",
-              "z-index": 101,
+              zIndex: 101,
               top: 0,
               width: "100%",
-              "box-sizing": "border-box",
+              boxSizing: "border-box",
               height: defaultTopMenuHeight,
             })
             .addClass("fixed");
           $main.css({
-            "margin-top": defaultTopMenuHeight,
+            marginTop: defaultTopMenuHeight,
           });
         } else {
           $topMenu.css(emptyStyle).removeClass("fixed");
           $main.css({
             top: "",
             position: "",
-            "margin-top": "",
+            marginTop: "",
           });
         }
       }
@@ -513,7 +518,8 @@
       $btn
         .click(() => {
           setHeaderVisibility(
-            $header.css("visibility") === "hidden" || $header.hasClass("fixed")
+            localStorage.getItem("header-visibility") === "false" ||
+              $header.hasClass("fixed")
           );
         })
         .mouseover(() => {
@@ -530,12 +536,17 @@
     }
 
     // Invoke each functions
-    createSimpleMenu();
-    createSimpleSideMenu();
-    createSimpleProjectsMenu();
-    createSimpleSearchForm();
-    createSimpleTitleBar();
-    enableHeaderVisibilityToggleFeature();
+    try {
+      createSimpleMenu();
+      createSimpleSideMenu();
+      createSimpleProjectsMenu();
+      createSimpleSearchForm();
+      createSimpleTitleBar();
+      enableHeaderVisibilityToggleFeature();
+    } finally {
+      // Remove the default header style if the style is added to the html header
+      $("head>style.simple-menu-bar").remove();
+    }
   });
 
   // ----- Global function -----
