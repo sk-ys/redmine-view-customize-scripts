@@ -571,10 +571,6 @@
 </script>
 
 <style>
-  html {
-    overflow: hidden;
-  }
-
   /* ----- Simple menu settings ----- */
   #top-menu .simple-menu:not(#simple-projects-menu) {
     /* initial state is hidden */
@@ -691,12 +687,6 @@
   /* ----- simple title bar settings ----- */
   #top-menu > ul {
     float: left;
-  }
-
-  #top-menu > .simple-title-bar {
-    position: absolute;
-    width: 100%;
-    z-index: -1;
   }
 
   #top-menu > .simple-title-bar > div {
