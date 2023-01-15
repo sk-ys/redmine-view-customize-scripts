@@ -99,6 +99,10 @@
       ?.match(/^project-(.+)/)[1];
     const syncHeaderVisibilityItems = [];
 
+    if ($topMenu.has('a.administration').length > 0) {
+      $topMenu.addClass('has-admin-menu');
+    }
+
     // ----- Common functions -----
     // Show or hide dropdown menu
     function setDropdownVisibility(dropdown, state) {
@@ -396,7 +400,7 @@
       }
 
       $title.attr("title", $titleBar.text());
-      $topMenu.append($titleBar);
+      $topMenu.prepend($titleBar);
     }
 
     // ----- Toggle header visibility function -----
@@ -689,20 +693,37 @@
     float: left;
   }
 
-  #top-menu > .simple-title-bar > div {
+  #top-menu > .simple-title-bar {
+    position: absolute;
+    left: 0;
+    pointer-events: none;
     text-align: center;
+    width: 100%;
+  }
+
+  #top-menu > .simple-title-bar > div {
+    display: inline-block;
+    pointer-events: auto;
     opacity: 0.5;
-    width: calc(100% - 600px);
+    width: calc(100% - 550px);
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-    margin: auto;
     direction: rtl;
     transition: opacity 1s;
   }
 
+  
+  #top-menu.has-admin-menu > .simple-title-bar > div {
+    width: calc(100% - 650px);
+  }
+
   #top-menu.fixed > .simple-title-bar > div {
-    width: calc(100% - 900px);
+    width: calc(100% - 750px);
+  }
+
+  #top-menu.fixed.has-admin-menu > .simple-title-bar > div {
+    width: calc(100% - 950px);
   }
 
   #top-menu > .simple-title-bar > div:hover {
