@@ -37,7 +37,7 @@
 - ブラウザ
   - Chrome Version 117.0.5938.89 (Official Build) (64-bit)
   - Vivaldi 6.2.3105.48 (Stable channel) (64-bit)
-  - FireFox 117.0.1 (64-bit)
+  - Firefox 117.0.1 (64-bit)
 
 ## 設定
 - パスのパターン: `/issues((|/)$|/\?.+)`
@@ -211,7 +211,7 @@ $(() => {
     // Hide the original context menu
     $("#context-menu").hide();
 
-    $(event.target).closest("td").addClass("selected");
+    $(event.target).closest("tr.issue>td").addClass("selected");
 
     const typeLabel = $(
       `table.list.issues th.${field.replace(" ", ".")}>a`
