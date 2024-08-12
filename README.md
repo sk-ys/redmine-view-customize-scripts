@@ -13,7 +13,7 @@ onozaty氏の https://github.com/onozaty/redmine-view-customize プラグイン�
 * [ページ最上部または最下部にスクロールするボタンを追加する](./javascripts/scroll_to_top_or_bottom/scroll_to_top_or_bottom.md)
 * [ガントチャートの題名列の幅を変更する](./javascripts/change_column_width_of_gantt/change_column_width_of_gantt.md)
 * [チケット一覧のフィールド毎に編集メニューを表示する](./javascripts/field_edit_menu_on_issue_list/field_edit_menu_on_issue_list.md)
-* [チケット登録フォームへのリンクをクリップボードにコピーするボタンを追加する](javascripts\copy_link_to_the_new_form\copy_link_to_the_new_form.md)
+* [チケット登録フォームへのリンクをクリップボードにコピーするボタンを追加する](javascripts/copy_link_to_the_new_form/copy_link_to_the_new_form.md)
 
 ## CSS
 * [ガントチャートのトラッカー名とチケットID，チケット名の区別を明確にする](./stylesheets/define_tracker_name_and_issue_id-name_on_gantt/define_tracker_name_and_issue_id-name_on_gantt.md)
