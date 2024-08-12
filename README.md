@@ -27,3 +27,4 @@ onozaty氏の https://github.com/onozaty/redmine-view-customize プラグイン�
 * [どこでもポップアップ](./html/popup_anywhere/popup_anywhere.md)
 * [画像挿入ダイアログ](./html/insert_image_dialog/insert_image_dialog.md)
 * [シンプルメニューバー](./html/simple_menu_bar/simple_menu_bar.md)
+* [Preブロックの内容をクリップボードにコピーするボタンを追加する](html/adding_a_copy_button_to_the_pre_block/adding_a_copy_button_to_the_pre_block.md)
